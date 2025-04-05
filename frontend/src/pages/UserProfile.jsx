@@ -122,10 +122,8 @@ const AccountDetails = () => {
 
   const onSubmit = async (data) => {
     data = {...data, location: JSON.stringify(location)};
-    console.log("form data", data);
     // try {
     //   data = {...data, location: JSON.stringify(location)};
-    //   console.log("data", data);
     //   setIsAuthenticated(false);
     //   const formData = new FormData();
     //   for (const key in data) {
@@ -136,8 +134,6 @@ const AccountDetails = () => {
     //     }
     //   }
 
-    //   console.log("form");
-    //   // console.log(formData);
     //   const response = await fetch(
     //     "http://localhost:8000/api/v1/service-provider/register-sevice-provider",
     //     {
@@ -150,7 +146,6 @@ const AccountDetails = () => {
     //   );
     //   if (response.ok) {
     //     const res = await response.json();
-    //     console.log("Login successful:", res);
     //     setIsAuthenticated(true); // Update the auth state
     //     navigate("/");
     //   }
@@ -158,8 +153,6 @@ const AccountDetails = () => {
     //   //   console.error("Login failed");
     //   // }
 
-    //   // console.log(data);
-    //   console.log("form submitted");
     // } catch (error) {
     //   console.log("errooorr", error);
     // }

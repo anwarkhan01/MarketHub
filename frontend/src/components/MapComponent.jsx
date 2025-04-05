@@ -144,7 +144,6 @@ const MapComponent = forwardRef(({onLocationSelect, setShowMap}, ref) => {
 
   const handleConfirmLocation = () => {
     onLocationSelect(selectedLocation);
-    // console.log("confirmed location:", selectedLocation);
   };
   return (
     // <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">

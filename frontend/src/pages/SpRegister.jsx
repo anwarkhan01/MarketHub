@@ -44,7 +44,6 @@ const SpRegister = () => {
   const onSubmit = async (data) => {
     try {
       data = {...data, location: JSON.stringify(location)};
-      console.log("data", data);
       setIsAuthenticated(false);
       const formData = new FormData();
       for (const key in data) {
@@ -55,23 +54,17 @@ const SpRegister = () => {
         }
       }
 
-      console.log("form");
-      // console.log(formData);
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
         }/api/v1/service-provider/register-sevice-provider`,
         {
           method: "POST",
-          // headers: {
-          //   "content-type": "application/json",
-          // },
           body: formData,
         }
       );
       if (response.ok) {
         const res = await response.json();
-        console.log("Login successful:", res);
         setIsAuthenticated(true); // Update the auth state
         navigate("/");
       }
@@ -79,10 +72,8 @@ const SpRegister = () => {
       //   console.error("Login failed");
       //   navigate("/auth");
       // }
-      // console.log(data);
-      console.log("form submitted");
     } catch (error) {
-      console.log("errooorr", error);
+      console.log("errorr", error);
     }
   };
   const getCurrentLocation = () => {

@@ -15,7 +15,6 @@ const SpLogin = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log(data);
 
     try {
       const response = await fetch(
@@ -31,7 +30,6 @@ const SpLogin = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log("Login successful:", data);
         setIsAuthenticated(true); // Update the auth state
         navigate("/");
       } else {

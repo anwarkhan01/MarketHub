@@ -1,5 +1,5 @@
 import React, {createContext, useState, useEffect} from "react";
-
+import Cookies from "js-cookie";
 export const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
@@ -8,6 +8,13 @@ const AuthProvider = ({children}) => {
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
+    const token = Cookies.get("isLoggedIn");
+    console.log("token", token);
+    if (token) {
+      setIsAuthenticated(true);
+      setLoading(false);
+      return;
+    }
     const verifyUser = async () => {
       try {
         const response = await fetch(
@@ -18,7 +25,6 @@ const AuthProvider = ({children}) => {
           }
         );
         const data = await response.json();
-        console.log("Logged-in user data:", data);
         if (response.ok) {
           setIsAuthenticated(true);
           if (data.data.user) {

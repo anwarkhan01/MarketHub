@@ -16,11 +16,11 @@ const ServiceProviderList = () => {
         );
         if (!response.ok) {
           const data = await response.json();
-          console.error("dataaaaa", data);
+    
           return;
         }
         const data = await response.json();
-        console.log("real dataaaaa", data);
+    
       } catch (err) {
         console.error("Error fetching providerssss:", err.message);
       }

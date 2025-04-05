@@ -13,7 +13,6 @@ const Home = () => {
   // const [distance, setDistance] = useState();
   const navigate = useNavigate();
 
-  // console.log("userData", userData);
   const {
     handleSubmit,
     register,
@@ -44,7 +43,6 @@ const Home = () => {
         const data = await response.json();
         if (!response.ok) {
           setSearchResults(data);
-          console.log(data);
         } else {
           const serviceProviders = data.data.serviceProviderData;
           const updatedServiceProviders = await Promise.all(
@@ -78,7 +76,6 @@ const Home = () => {
 
   const onSubmit = async (query) => {
     setLoading(true);
-    console.log("userData", userData?.email);
     try {
       const response = await fetch(
         `${
@@ -91,7 +88,6 @@ const Home = () => {
       const data = await response.json();
       if (!response.ok) {
         setSearchResults(data);
-        console.log(data);
       } else {
         const serviceProviders = data.data.serviceProviderData;
 
@@ -116,12 +112,10 @@ const Home = () => {
           })
         );
 
-        console.log(data);
         setSearchResults(updatedServiceProviders); // Update the search results
       }
     } catch (error) {
       setSearchResults([]);
-      console.log("Error:", error);
     } finally {
       setLoading(false);
     }
@@ -131,16 +125,14 @@ const Home = () => {
     if (typeof location == String) return;
     const {lat, lng} = location;
     window.open(`https://maps.google.com/?q=${lat},${lng}`, "_blank");
-    console.log(lat, lng);
   };
 
   const handleCardClick = (searchedSP) => {
-    console.log(searchedSP);
     sessionStorage.setItem("searchResults", JSON.stringify(searchResults));
     navigate("/sp-detailed-profile", {state: {searchedSP}});
   };
   return (
-    <div className="container mx-auto px-4 py-8 bg-[#02010A] min-h-screen">
+    <div className="container mx-auto px-4 py-8 bg-[#02010A] min-h-screen w-full">
       {/* Search Section */}
       <div className="mb-8">
         <form

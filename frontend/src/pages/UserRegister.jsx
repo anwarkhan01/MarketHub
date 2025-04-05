@@ -44,7 +44,6 @@ const UserRegister = () => {
   const onSubmit = async (data) => {
     try {
       data = {...data, location: JSON.stringify(location)};
-      console.log("data", data);
       setIsAuthenticated(false);
       const formData = new FormData();
       for (const key in data) {
@@ -64,14 +63,12 @@ const UserRegister = () => {
       );
       if (response.ok) {
         const res = await response.json();
-        console.log("Login successful:", res);
         setIsAuthenticated(true); // Update the auth state
         navigate("/");
       }
     } catch (error) {
-      console.log("errooorr", error);
+      console.log("err0r", error);
     }
-    console.log(data);
   };
 
   const getCurrentLocation = () => {

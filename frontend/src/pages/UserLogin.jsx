@@ -30,14 +30,13 @@ const UserLogin = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log("Login successful:", data);
         setIsAuthenticated(true);
         navigate("/");
       } else {
         console.error("Login failed");
       }
     } catch (error) {
-      console.log("some error occured while logging");
+      console.log("some error occured while logging", error);
     }
   };
   return (

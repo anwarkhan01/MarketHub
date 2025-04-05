@@ -111,7 +111,6 @@ const SpProfile = () => {
 
   const onSubmit = async (data) => {
     data = {...data, location: JSON.stringify(location)};
-    console.log("form data", data);
   };
 
   const updateDatatoForm = () => {
