@@ -4,7 +4,7 @@ import {useContext} from "react";
 import {AuthContext} from "../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 const UserLogin = () => {
-  const {setIsAuthenticated} = useContext(AuthContext);
+  const {setIsAuthenticated, setUserData} = useContext(AuthContext);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -29,11 +29,18 @@ const UserLogin = () => {
         }
       );
       if (response.ok) {
-        const data = await response.json();
+        let data = await response.json();
+        console.log(data);
         setIsAuthenticated(true);
-        navigate("/");
+        if (data.data.user) {
+          setUserData(data.data.user);
+          navigate("/");
+        } else {
+          setUserData(data.data.sp);
+          navigate("/");
+        }
       } else {
-        console.error("Login failed");
+        setIsAuthenticated(false);
       }
     } catch (error) {
       console.log("some error occured while logging", error);

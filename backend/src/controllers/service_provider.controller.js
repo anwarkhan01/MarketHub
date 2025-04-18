@@ -143,6 +143,7 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
         .status(200)
         .cookie("accessToken", accessToken, options)
         .cookie("refreshToken", refreshToken, options)
+        .cookie("isLoggedIn", true)
         .json(
             new ApiResponse(
                 200, { sp: loggedInUser },

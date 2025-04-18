@@ -10,6 +10,7 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState([]);
   const {userData} = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
   // const [distance, setDistance] = useState();
   const navigate = useNavigate();
 
@@ -17,65 +18,62 @@ const Home = () => {
     handleSubmit,
     register,
     setError,
+    watch,
     formState: {errors, isSubmitted},
   } = useForm();
+  const queryText = watch("query");
 
-  // useEffect(() => {
-  //   // const savedQuery = sessionStorage.getItem("searchQuery");
-  //   const savedResults = sessionStorage.getItem("searchResults");
+  const defaultData = async () => {
+    setSearchResults([]);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/general-sp-data`,
+        {
+          method: "GET",
+        }
+      );
 
-  //   if (savedResults) {
-  //     // setSearchQuery(savedQuery);
-  //     setSearchResults(JSON.parse(savedResults));
-  //   }
-  // }, []);
+      const data = await response.json();
+      if (!response.ok) {
+        setSearchResults(data);
+      } else {
+        const serviceProviders = data.data.serviceProviderData;
 
-  useEffect(() => {
-    const defaultData = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/general-sp-data`,
-          {
-            method: "GET",
-          }
+        const updatedServiceProviders = await Promise.all(
+          serviceProviders.map(async (sp) => {
+            let pointA;
+            let pointB;
+            if (sp.location) {
+              const {lat, lng} = JSON.parse(sp.location); // Parse the location string
+              pointA = {lat, lng};
+              sp.humanReadableAddress = await getReadableAddress(lat, lng);
+              sp.coordinates = {lat, lng};
+            }
+            if (userData.location) {
+              const {lat, lng} = JSON.parse(userData.location);
+              pointB = {lat, lng};
+              const distance = calculateDistance(pointA, pointB);
+              sp.distanceFromCurrentUser = distance;
+            }
+            return sp;
+          })
         );
 
-        const data = await response.json();
-        if (!response.ok) {
-          setSearchResults(data);
-        } else {
-          const serviceProviders = data.data.serviceProviderData;
-          const updatedServiceProviders = await Promise.all(
-            serviceProviders.map(async (sp) => {
-              let pointA;
-              let pointB;
-              if (sp.location) {
-                const {lat, lng} = JSON.parse(sp.location); // Parse the location string
-                pointA = {lat, lng};
-                // Add both the readable address and the lat/lng
-                sp.humanReadableAddress = await getReadableAddress(lat, lng);
-                sp.coordinates = {lat, lng}; // Preserve the lat/lng for map display
-              }
-              if (userData.location) {
-                const {lat, lng} = JSON.parse(userData.location);
-                pointB = {lat, lng};
-                const distance = calculateDistance(pointA, pointB);
-                sp.distanceFromCurrentUser = distance;
-              }
-              return sp;
-            })
-          );
+        setSearchResults(updatedServiceProviders); // Update the search results
+      }
+    } catch (error) {}
+  };
 
-          setSearchResults(updatedServiceProviders); // Update the search results
-        }
-        setSearchResults(data.data.serviceProviderData);
-      } catch (error) {}
-    };
-    defaultData();
-  }, [userData]);
+  useEffect(() => {
+    if (queryText === "" || !queryText) {
+      defaultData();
+    }
+  }, [userData, queryText]);
 
   const onSubmit = async (query) => {
+    console.log("query", query);
     setLoading(true);
+    setSearchResults([]);
     try {
       const response = await fetch(
         `${
@@ -143,6 +141,10 @@ const Home = () => {
             type="text"
             name="search"
             {...register("query")}
+            // value={searchText}
+            // onChange={(e) => {
+            //   setSearchText(e.target.value);
+            // }}
             placeholder="Search Service Providers..."
             className="px-4 py-2 border border-gray-600 rounded-l-lg w-1/2 text-white bg-[#1A1A2E] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4F46E5]"
           />

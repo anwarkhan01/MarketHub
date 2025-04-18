@@ -4,17 +4,10 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // Add a loading state
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    const token = Cookies.get("isLoggedIn");
-    console.log("token", token);
-    if (token) {
-      setIsAuthenticated(true);
-      setLoading(false);
-      return;
-    }
     const verifyUser = async () => {
       try {
         const response = await fetch(
@@ -43,12 +36,27 @@ const AuthProvider = ({children}) => {
       }
     };
 
-    verifyUser();
+    if (userData.length <= 0) {
+      const token = Cookies.get("accessToken");
+      if (!token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      } else {
+        verifyUser();
+      }
+    }
   }, [isAuthenticated]);
 
   return (
     <AuthContext.Provider
-      value={{isAuthenticated, loading, setIsAuthenticated, userData}}
+      value={{
+        isAuthenticated,
+        loading,
+        setIsAuthenticated,
+        userData,
+        setUserData,
+      }}
     >
       {children}
     </AuthContext.Provider>
