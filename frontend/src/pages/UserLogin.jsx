@@ -1,11 +1,14 @@
 import React from "react";
 import {useForm} from "react-hook-form";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {AuthContext} from "../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
+import Toast from "../components/Toast.jsx";
 const UserLogin = () => {
   const {setIsAuthenticated, setUserData} = useContext(AuthContext);
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+  const [toastData, setToastData] = useState({});
   const {
     handleSubmit,
     register,
@@ -30,7 +33,6 @@ const UserLogin = () => {
       );
       if (response.ok) {
         let data = await response.json();
-        console.log(data);
         setIsAuthenticated(true);
         if (data.data.user) {
           setUserData(data.data.user);
@@ -41,6 +43,11 @@ const UserLogin = () => {
         }
       } else {
         setIsAuthenticated(false);
+        let data = await response.json();
+        setToastData({message: data.message, duration: 3000, type: "failure"});
+        setShowToast(true);
+
+        console.log(data);
       }
     } catch (error) {
       console.log("some error occured while logging", error);
@@ -125,6 +132,14 @@ const UserLogin = () => {
           </p>
         </form>
       </div>
+      {showToast && (
+        <Toast
+          message={toastData.message}
+          duration={toastData.duration}
+          type={toastData.type}
+          onclose={() => setShowToast(false)}
+        />
+      )}
     </div>
   );
 };

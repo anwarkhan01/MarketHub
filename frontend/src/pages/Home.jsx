@@ -10,8 +10,6 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState([]);
   const {userData} = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  // const [distance, setDistance] = useState();
   const navigate = useNavigate();
 
   const {
@@ -71,7 +69,6 @@ const Home = () => {
   }, [userData, queryText]);
 
   const onSubmit = async (query) => {
-    console.log("query", query);
     setLoading(true);
     setSearchResults([]);
     try {
@@ -113,6 +110,7 @@ const Home = () => {
         setSearchResults(updatedServiceProviders); // Update the search results
       }
     } catch (error) {
+      console.log(error);
       setSearchResults([]);
     } finally {
       setLoading(false);
@@ -141,10 +139,6 @@ const Home = () => {
             type="text"
             name="search"
             {...register("query")}
-            // value={searchText}
-            // onChange={(e) => {
-            //   setSearchText(e.target.value);
-            // }}
             placeholder="Search Service Providers..."
             className="px-4 py-2 border border-gray-600 rounded-l-lg w-1/2 text-white bg-[#1A1A2E] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4F46E5]"
           />
@@ -178,15 +172,15 @@ const Home = () => {
             >
               {/* Left Section - Profile Image */}
               <img
-                src={sp.profilePhoto || "https://via.placeholder.com/150"}
+                src={sp.profilePhoto || "/users.png"}
                 alt="SP Profile"
                 className="w-36 h-36 rounded-full border-4 border-[#4A90E2] mb-6 md:mb-0 transition-transform duration-300 transform hover:scale-105"
               />
-
               {/* Right Section - Service Provider Info */}
               <div className="text-white flex-1">
-                <h3 className="text-3xl font-bold text-[#4A90E2]">{sp.name}</h3>
-                <p className="text-lg text-[#D1D1D1] mb-4">{sp.fullname}</p>
+                <h3 className="text-3xl font-medium text-[#4A90E2]">
+                  {sp.name || "Service Provider Name"}
+                </h3>
 
                 <div className="space-y-2">
                   <p>

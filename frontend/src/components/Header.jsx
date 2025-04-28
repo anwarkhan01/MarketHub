@@ -84,6 +84,19 @@ const Header = () => {
                 Home
               </NavLink>
             </li>
+            <li className="md:hidden">
+              <NavLink
+                to={userData.role === "user" ? "user-profile" : "sp-profile"}
+                className={({isActive}) =>
+                  isActive
+                    ? "text-[#22007C] border-b-2 border-[#22007C] pb-1"
+                    : "text-white hover:text-[#04052E]"
+                }
+                onClick={() => setMenuOpen(false)}
+              >
+                Profile
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 to="about"
@@ -113,20 +126,19 @@ const Header = () => {
           </ul>
         </nav>
 
-        {/* Profile Section (Hidden on mobile) */}
+        {/* Profile Section */}
         <div
           className="hidden md:flex w-10 h-10 bg-[#22007C] rounded-full overflow-hidden items-center justify-center"
           onClick={() =>
-            userData.role === "user"
+            userData && userData.role === "user"
               ? navigate("/user-profile")
               : navigate("/sp-profile")
           }
         >
           <img
-            src={userData?.profilePhoto || null}
+            src={(userData && userData?.profilePhoto) || "/users.png"}
             alt="Profile"
             className="w-full h-full object-cover"
-            // onError={(e) => (e.target.src = "")}
           />
         </div>
       </div>

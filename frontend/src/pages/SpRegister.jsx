@@ -12,7 +12,7 @@ const SpRegister = () => {
   const [showMap, setShowMap] = useState(false);
   const [readableAddress, setReadableAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const {setIsAuthenticated} = useContext(AuthContext);
+  const {setIsAuthenticated, setUserData} = useContext(AuthContext);
   const navigate = useNavigate();
 
   const mapElement = useRef(null);
@@ -65,6 +65,7 @@ const SpRegister = () => {
       );
       if (response.ok) {
         const res = await response.json();
+        setUserData(res.data.sp);
         setIsAuthenticated(true); // Update the auth state
         navigate("/");
       }
@@ -123,26 +124,26 @@ const SpRegister = () => {
           className="grid grid-cols-2 gap-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          {/* Full Name Field */}
+          {/* Name Field */}
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="fullname"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Full Name
+              Name <span className="text-orange-600">*</span>
             </label>
             <input
               type="text"
-              id="fullname"
-              name="fullname"
-              {...register("fullname", {
-                required: {value: true, message: "fullname is required"},
+              id="name"
+              name="name"
+              {...register("name", {
+                required: {value: true, message: "name is required"},
               })}
               placeholder="Enter your full name"
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
             />
-            {errors.fullname && (
-              <span className="text-red-700">{errors.fullname.message}</span>
+            {errors.name && (
+              <span className="text-red-700">{errors.name.message}</span>
             )}
           </div>
 
@@ -152,7 +153,7 @@ const SpRegister = () => {
               htmlFor="username"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Username
+              Username <span className="text-orange-600">*</span>
             </label>
             <input
               type="text"
@@ -181,9 +182,7 @@ const SpRegister = () => {
               type="email"
               id="email"
               name="email"
-              {...register("email", {
-                required: {value: true, message: "email is required"},
-              })}
+              {...register("email")}
               placeholder="Enter your email"
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
             />
@@ -198,7 +197,7 @@ const SpRegister = () => {
               htmlFor="password"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Password
+              Password <span className="text-orange-600">*</span>
             </label>
             <input
               type="password"
@@ -206,7 +205,8 @@ const SpRegister = () => {
               name="password"
               {...register("password", {
                 required: {value: true, message: "This field is required"},
-                minLength: {value: 3, message: "Min length is 3"},
+                minLength: {value: 4, message: "Min length is 4"},
+                maxLength: {value: 10, message: "Max length is 10"},
               })}
               placeholder="Enter your password"
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
@@ -222,7 +222,7 @@ const SpRegister = () => {
               htmlFor="location"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Location
+              Location <span className="text-orange-600">*</span>
             </label>
             <input
               type="text"
@@ -234,6 +234,7 @@ const SpRegister = () => {
               })}
               placeholder="Select your location"
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              style={{caretColor: "transparent"}}
             />
             {errors.location && (
               <span className="text-red-700">{errors.location.message}</span>
@@ -270,7 +271,7 @@ const SpRegister = () => {
               htmlFor="profession"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Profession
+              Profession <span className="text-orange-600">*</span>
             </label>
             <input
               type="text"
@@ -322,7 +323,7 @@ const SpRegister = () => {
               htmlFor="phoneNumber"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Phone Number
+              Phone Number <span className="text-orange-600">*</span>
             </label>
             <input
               type="tel"
@@ -353,14 +354,14 @@ const SpRegister = () => {
               type="file"
               id="profilePhoto"
               name="profilePhoto"
-              {...register("profilePhoto", {required: "Image is required"})}
+              {...register("profilePhoto")}
               className="w-full px-4 py-2 bg-[#140152] text-gray-300 rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
               accept="image/*"
             />
           </div>
 
           {/* Work Images Field */}
-          <div className="col-span-2 md:col-span-1">
+          {/* <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="workImages"
               className="block text-sm font-medium text-gray-300 mb-2"
@@ -376,7 +377,7 @@ const SpRegister = () => {
               accept="image/*"
               multiple
             />
-          </div>
+          </div> */}
 
           {/* Experience Field */}
           <div className="col-span-2">

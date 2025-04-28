@@ -2,7 +2,7 @@ import React from "react";
 
 const Contact = () => {
   return (
-    <div className="min-h-screen bg-[#02010A] text-white">
+    <div className="flex-grow bg-[#02010A] text-white">
       <div className="container mx-auto px-6 py-12">
         <div className="text-center mb-12">
           <p className="text-gray-300 text-lg">We'd love to hear from you</p>
@@ -14,17 +14,28 @@ const Contact = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-[#04052E] p-6 rounded-lg border border-[#140152] text-center">
             <h2 className="text-xl font-semibold mb-2">📞 Call Us</h2>
-            <p className="text-gray-400">+91 9876543210</p>
-          </div>
-
-          <div className="bg-[#04052E] p-6 rounded-lg border border-[#140152] text-center">
-            <h2 className="text-xl font-semibold mb-2">📍 Visit Us</h2>
-            <p className="text-gray-400">vasai phata, vasai (E) 401208</p>
+            <a href="tel:+8408852662" className="text-gray-400">
+              +91 8408852662
+            </a>
           </div>
 
           <div className="bg-[#04052E] p-6 rounded-lg border border-[#140152] text-center">
             <h2 className="text-xl font-semibold mb-2">📧 Email Us</h2>
-            <p className="text-gray-400">support@markethub.com</p>
+            <a href="mailto:anwarkhan84088@gmail.com" className="text-gray-400">
+              anwarkhan84088@gmail.com
+            </a>
+          </div>
+
+          <div className="bg-[#04052E] p-6 rounded-lg border border-[#140152] text-center">
+            <h2 className="text-xl font-semibold mb-2">💻 GitHub</h2>
+            <a
+              href="https://github.com/anwarkhan01" // Replace with your actual GitHub username
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400"
+            >
+              github.com/anwarkhan01
+            </a>
           </div>
         </div>
 
@@ -36,8 +47,7 @@ const Contact = () => {
                 <input
                   type="text"
                   placeholder="Name"
-                  className="w-full px-4 py-2 rounded-lg bg-[#140152] text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]
-                 "
+                  className="w-full px-4 py-2 rounded-lg bg-[#140152] text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
                 />
               </div>
               <div>
@@ -60,8 +70,7 @@ const Contact = () => {
             </div>
 
             <button
-              className="w-full bg-[#22007C] py-2 mt-6 rounded-lg hover:bg-[#140152] 
-            transition-all"
+              className="w-full bg-[#22007C] py-2 mt-6 rounded-lg hover:bg-[#140152] transition-all"
               onClick={(e) => e.preventDefault()}
             >
               Send Message
@@ -69,13 +78,6 @@ const Contact = () => {
           </form>
         </div>
       </div>
-
-      {/* <div className="text-center pb-6">
-        <p className="text-gray-400 text-sm">
-          &copy; {new Date().getFullYear()} MarketHub. Built to connect you with
-          the best.
-        </p>
-      </div> */}
     </div>
   );
 };

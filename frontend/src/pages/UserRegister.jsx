@@ -6,13 +6,15 @@ import getReadableAddress from "../utils/getReadableAddress.js";
 import {useContext} from "react";
 import {AuthContext} from "../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
-
+import Toast from "../components/Toast.jsx";
 const UserRegister = () => {
   const [location, setLocation] = useState({});
   const [showMap, setShowMap] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastData, setToastData] = useState({});
   const [readableAddress, setReadableAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const {setIsAuthenticated} = useContext(AuthContext);
+  const {setIsAuthenticated, setUserData} = useContext(AuthContext);
   const navigate = useNavigate();
   const mapElement = useRef(null);
 
@@ -26,7 +28,7 @@ const UserRegister = () => {
 
   const handleClickOutside = (event) => {
     if (mapElement.current && !mapElement.current.contains(event.target)) {
-      setShowMap(false); // Hide overlay if click is outside
+      setShowMap(false);
     }
   };
 
@@ -48,7 +50,6 @@ const UserRegister = () => {
       const formData = new FormData();
       for (const key in data) {
         if (key === "profilePhoto" && data[key][0]) {
-          // Append the file (data.profilePhoto is an array of files)
           formData.append("profilePhoto", data[key][0]);
         } else {
           formData.append(key, data[key]);
@@ -63,11 +64,25 @@ const UserRegister = () => {
       );
       if (response.ok) {
         const res = await response.json();
-        setIsAuthenticated(true); // Update the auth state
+        setIsAuthenticated(true);
+        setUserData(res.data.user);
+        console.log("res", res);
         navigate("/");
+      } else {
+        let data = await response.json();
+        console.log(data.message);
+        setToastData({
+          message: data.message,
+          duration: 3000,
+          type: "failure",
+        });
+        setShowToast(true);
       }
     } catch (error) {
-      console.log("err0r", error);
+      console.log(
+        "some unexpected error occured while registering the uses",
+        error
+      );
     }
   };
 
@@ -117,27 +132,27 @@ const UserRegister = () => {
           className="grid grid-cols-2 gap-6"
           onSubmit={handleSubmit(onSubmit)}
         >
-          {/* Full Name Field */}
+          {/*Name Field */}
           <div className="col-span-2 md:col-span-1">
             <label
-              htmlFor="fullname"
+              htmlFor="name"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Full Name
+              Name
             </label>
             <input
               type="text"
-              id="fullname"
-              name="fullname"
-              placeholder="Enter your full name"
-              {...register("fullname", {
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              {...register("name", {
                 minLength: {value: 3, message: "Min length is 3"},
               })}
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
             />
-            {errors.fullname && (
+            {errors.name && (
               <span className="text-xs text-red-700">
-                {errors.fullname.message}
+                {errors.name.message}
               </span>
             )}
           </div>
@@ -148,7 +163,7 @@ const UserRegister = () => {
               htmlFor="username"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Username
+              Username <span className="text-orange-600">*</span>
             </label>
             <input
               type="text"
@@ -156,9 +171,9 @@ const UserRegister = () => {
               name="username"
               placeholder="Enter your username"
               {...register("username", {
-                required: {value: true, message: "This field is required"},
+                required: {value: true, message: "username is required"},
                 minLength: {value: 3, message: "Min length is 3"},
-                maxLength: {value: 8, message: "Max length is 8"},
+                maxLength: {value: 12, message: "Max length is 12"},
               })}
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
               required
@@ -182,9 +197,7 @@ const UserRegister = () => {
               type="email"
               id="email"
               name="email"
-              {...register("email", {
-                required: {value: true, message: "This field is required"},
-              })}
+              {...register("email")}
               placeholder="Enter your email"
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
               required
@@ -202,16 +215,16 @@ const UserRegister = () => {
               htmlFor="password"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Password
+              Password <span className="text-orange-600">*</span>
             </label>
             <input
               type="password"
               id="password"
               name="password"
               {...register("password", {
-                required: {value: true, message: "This field is required"},
-                minLength: {value: 3, message: "Min length is 3"},
-                maxLength: {value: 8, message: "Max length is 8"},
+                required: {value: true, message: "password is required"},
+                minLength: {value: 4, message: "Min length is 4"},
+                maxLength: {value: 10, message: "Max length is 10"},
               })}
               placeholder="Enter your password"
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
@@ -257,6 +270,7 @@ const UserRegister = () => {
               {...register("location")}
               placeholder="Select your location"
               className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              style={{caretColor: "transparent"}}
             />
             {errors.location && (
               <span className="text-red-700">{errors.location.message}</span>
@@ -308,6 +322,14 @@ const UserRegister = () => {
             readableAddress={readableAddress}
           />
         </div>
+      )}
+      {showToast && (
+        <Toast
+          message={toastData.message}
+          duration={toastData.duration}
+          type={toastData.type}
+          onclose={() => setShowToast(false)}
+        />
       )}
     </div>
   );

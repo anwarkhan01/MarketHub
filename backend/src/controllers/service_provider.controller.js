@@ -23,52 +23,43 @@ const generateAccessAndRefereshTokens = async (userId) => {
 
 
 const registerServiceProvider = asyncHandler(async (req, res) => {
-    console.log(req.body)
-    const { fullname,
+    const { name,
         email,
         username,
         password,
-        // professionDescription,
         about,
         profession,
-        // profilePhoto,
         experience,
         phoneNumber,
         location
     } = req.body
 
     if (
-        [fullname, email, username, password, profession, phoneNumber, location, about]
+        [username, password, profession, phoneNumber, location]
             .some((field) => field?.trim() === "")
     ) {
-        throw new ApiError(400, "All fields are required")
+        throw new ApiError(400, "Ensure all required fields are filled")
     }
 
 
     const existedUser = await serviceProvider.findOne({ username })
 
     if (existedUser) {
-        throw new ApiError(409, "User with username already exists")
+        throw new ApiError(409, "User with this username is already exists")
     }
 
-
-    const profilePhotoPath = req.files?.profilePhoto[0]?.path;
-    console.log(profilePhotoPath)
-
+    let profilePhotoPath;
     let profilePhotoUplaodResponse;
-    if (profilePhotoPath) {
+    if (req.files && Array.isArray(req.files.profilePhoto) && req.files.profilePhoto.length > 0) {
+        profilePhotoPath = req.files.profilePhoto[0]?.path;
         profilePhotoUplaodResponse = await uploadOnCloudinary(profilePhotoPath)
-    }
-    if (!profilePhotoPath) {
-        throw new ApiError(400, "path not found")
     }
 
     const sp = await serviceProvider.create({
-        fullname,
+        name,
         email,
         username: username.toLowerCase(),
         password,
-        // professionDescription,
         profilePhoto: profilePhotoUplaodResponse?.url || "",
         about: about || " ",
         profession,
@@ -79,7 +70,6 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
 
     })
 
-    console.log(sp)
     const createdSP = await serviceProvider.findById(sp._id).select(
         "-password"
     )
@@ -89,7 +79,7 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdSP, "User registered Successfully")
+        new ApiResponse(200, { sp: createdSP }, "User registered Successfully")
     )
 
 })
@@ -108,11 +98,10 @@ const verifySP = asyncHandler(async (req, res) => {
 const loginServiceProvider = asyncHandler(async (req, res) => {
 
     const { username, password } = req.body
-    console.log(username);
 
-    if (!username) {
-        throw new ApiError(400, "username is required")
-    }
+    if (!username) throw new ApiError(400, "username is required")
+    if (!password) throw new ApiError(400, "password is required")
+
 
     const sp = await serviceProvider.findOne({ username })
 
@@ -121,22 +110,18 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
     }
 
     const isPasswordValid = await sp.isPasswordCorrect(password)
-    console.log(isPasswordValid)
-    // const sayhello = await sp.helllo()
 
-    if (!isPasswordValid) {
-        throw new ApiError(401, "Invalid user credentials")
-    }
-    // console.log(sp._id)
+    if (!isPasswordValid) throw new ApiError(401, "Password is wrong")
+
 
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(sp._id)
 
-    console.log("access and refresh tokens generated", { accessToken, refreshToken })
-    const loggedInUser = await serviceProvider.findById(sp._id).select("-password")
+    const loggedInUser = await serviceProvider.findById(sp._id).select("-password -refreshToken")
 
     const options = {
-        httpOnly: true,
-        secure: true
+        httpOnly: false,
+        secure: true,
+        sameSite: "None"
     }
 
     return res
@@ -147,7 +132,7 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                 200, { sp: loggedInUser },
-                "User logged In Successfully"
+                "Service Provider logged In Successfully"
             )
         )
 

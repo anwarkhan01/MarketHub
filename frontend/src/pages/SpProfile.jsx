@@ -8,11 +8,11 @@ const SpProfile = () => {
   const {userData, setIsAuthenticated} = useContext(AuthContext);
   const navigate = useNavigate();
   const [preview, setPreview] = useState(
-    userData.profilePhoto || "/default-avatar.png"
+    (userData && userData.profilePhoto) || "/users.png"
   );
   const [isEditing, setIsEditing] = useState(false);
   // const [message, setMessage] = useState("");
-  const [location, setLocation] = useState(userData.location);
+  const [location, setLocation] = useState(userData && userData.location);
   const [showMap, setShowMap] = useState(false);
   const [readableAddress, setReadableAddress] = useState("");
   const mapElement = useRef();
@@ -154,9 +154,9 @@ const SpProfile = () => {
 
           {/* Other fields  */}
           <div className="mt-6 space-y-4">
-            {/* fullname  */}
+            {/* name  */}
             <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
-              <span className="text-[#AAB3CF]">Full Name:</span>
+              <span className="text-[#AAB3CF]">Name:</span>
               {isEditing ? (
                 <input
                   type="text"
@@ -166,7 +166,7 @@ const SpProfile = () => {
                   className="bg-transparent border-b border-white focus:outline-none text-white w-2/3 p-2 text-lg"
                 />
               ) : (
-                <span>{userData.fullname}</span>
+                <span>{userData.name || "Service Provider Name"}</span>
               )}
             </div>
 
@@ -198,7 +198,7 @@ const SpProfile = () => {
                 <span>{userData.username}</span>
               )}
             </div>
-
+            {/* phone  */}
             <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
               <span className="text-[#AAB3CF]">Phone:</span>
               {isEditing ? (
@@ -212,7 +212,7 @@ const SpProfile = () => {
                 <span>{userData.phoneNumber}</span>
               )}
             </div>
-
+            {/* profession  */}
             <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
               <span className="text-[#AAB3CF]">Profession:</span>
               {isEditing ? (
@@ -224,6 +224,33 @@ const SpProfile = () => {
                 />
               ) : (
                 <span>{userData.profession}</span>
+              )}
+            </div>
+
+            {/* about  */}
+            <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
+              <span className="text-[#AAB3CF]">About:</span>
+              {isEditing ? (
+                <input
+                  type="text"
+                  {...register("about")}
+                  className="bg-transparent border-b border-white focus:outline-none text-white w-2/3 p-2 text-lg"
+                />
+              ) : (
+                <span>{userData.about}</span>
+              )}
+            </div>
+            {/* experience  */}
+            <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
+              <span className="text-[#AAB3CF]">Experience:</span>
+              {isEditing ? (
+                <input
+                  type="text"
+                  {...register("experience")}
+                  className="bg-transparent border-b border-white focus:outline-none text-white w-2/3 p-2 text-lg"
+                />
+              ) : (
+                <span>{userData.experience}</span>
               )}
             </div>
             {/* location  */}
@@ -243,7 +270,6 @@ const SpProfile = () => {
                   >
                     📍
                   </button>
-                  {/* Button to open map modal */}
                   <button
                     className="text-[#FFD700] text-lg px-2 hover:text-white transition"
                     title="Select location on map"
@@ -258,7 +284,7 @@ const SpProfile = () => {
             </div>
           </div>
 
-          {/* buttons */}
+          {/* edit */}
           <div className="mt-6 flex justify-between items-center">
             <button
               className="bg-[#22007C] text-white px-6 py-2 rounded-lg hover:bg-[#04052E] transition"

@@ -11,14 +11,12 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        required: true,
         unique: true,
         lowecase: true,
         trim: true,
     },
-    fullname: {
+    name: {
         type: String,
-        required: true,
         trim: true,
     },
 

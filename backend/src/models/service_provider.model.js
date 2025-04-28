@@ -13,14 +13,12 @@ const serviceProviderSchema = new Schema({
     },
     email: {
         type: String,
-        required: true,
         unique: true,
         lowecase: true,
         trim: true,
     },
-    fullname: {
+    name: {
         type: String,
-        required: true,
         trim: true,
         index: true
     },
@@ -33,8 +31,6 @@ const serviceProviderSchema = new Schema({
         required: true,
         unique: true,
         trim: true,
-        // index: true
-        // sparse: true,
     },
     location: {
         type: String,
@@ -43,7 +39,6 @@ const serviceProviderSchema = new Schema({
     },
     profilePhoto: {
         type: String,   // Cloudinary
-        // required: true,
 
     },
     workImages: {

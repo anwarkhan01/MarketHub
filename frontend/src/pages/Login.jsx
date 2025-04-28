@@ -43,6 +43,29 @@ const Login = () => {
             </Link>
           </p>
         </div>
+        <div className="temp mt-4">
+          <h3 className="text-lg font-semibold mb-2">
+            Use these demo accounts to log in:
+          </h3>
+
+          <h2 className="text-[#22007C] font-bold mt-4">For User</h2>
+          <p>
+            <span className="font-medium">Username:</span> user4
+          </p>
+          <p>
+            <span className="font-medium">Password:</span> 1234
+          </p>
+
+          <h2 className="text-[#22007C] font-bold mt-4">
+            For Service Provider
+          </h2>
+          <p>
+            <span className="font-medium">Username:</span> asp3
+          </p>
+          <p>
+            <span className="font-medium">Password:</span> 1234
+          </p>
+        </div>
       </div>
     </div>
   );

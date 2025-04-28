@@ -172,7 +172,7 @@ const AccountDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#02010A] flex justify-center items-center p-6">
+    <div className="flex-grow  bg-[#02010A] flex justify-center items-center p-6">
       {userData && (
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -184,7 +184,7 @@ const AccountDetails = () => {
               <label htmlFor="profilePhoto" className="cursor-pointer">
                 <img
                   name="profilePhoto"
-                  src={preview}
+                  src={preview || "users.png"}
                   alt="Profile"
                   className={`w-32 h-32 rounded-full object-cover border-4 transition ${
                     isEditing ? "border-[#FFD700]" : "border-[#22007C]"
@@ -207,22 +207,19 @@ const AccountDetails = () => {
 
           {/* Other fields  */}
           <div className="mt-6 space-y-4">
-            {/* fullname  */}
+            {/* name  */}
             <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
-              <span className="text-[#AAB3CF]">Full Name:</span>
+              <span className="text-[#AAB3CF]">Name:</span>
               {isEditing ? (
                 <input
                   type="text"
-                  id="fullname"
-                  name="fullname"
-                  {...register("fullname")}
-                  // value={userData.fullname}
-                  // onChange={(e) => handleChange(e, "fullname")}
+                  id="name"
+                  name="name"
+                  {...register("name")}
                   className="bg-transparent border-b border-white focus:outline-none text-white w-2/3 p-2 text-lg"
-                  // required
                 />
               ) : (
-                <span>{userData.fullname}</span>
+                <span>{userData.name || "User Name"}</span>
               )}
             </div>
 

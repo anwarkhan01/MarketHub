@@ -19,13 +19,13 @@ const ServiceProviderDetails = () => {
         {/* Profile Section */}
         <div className="flex items-center gap-6">
           <img
-            src={searchedSP.profilePhoto || "/default-avatar.png"}
-            alt={searchedSP.fullname}
+            src={searchedSP.profilePhoto || "/users.png"}
+            alt={searchedSP.name}
             className="w-28 h-28 rounded-full border-4 border-[#22007C]"
           />
           <div>
             <h2 className="text-2xl font-bold text-[#22007C]">
-              {searchedSP.fullname}
+              {searchedSP.name || "Service Provider"}
             </h2>
             <p className="text-sm text-gray-300">{searchedSP.profession}</p>
           </div>
@@ -50,7 +50,7 @@ const ServiceProviderDetails = () => {
           </p>
         </div>
 
-        {/* Google Map Embed (No API Key Needed) */}
+        {/* Google Map */}
         <div className="mt-6">
           <h3 className="text-lg font-semibold  text-[#22007C]">Location</h3>
           <iframe

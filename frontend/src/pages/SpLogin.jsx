@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "../context/AuthProvider.jsx";
+import Toast from "../components/Toast.jsx";
 
 const SpLogin = () => {
   const {
@@ -11,11 +12,12 @@ const SpLogin = () => {
     formState: {errors, isSubmitting},
   } = useForm();
 
-  const {setIsAuthenticated} = useContext(AuthContext);
+  const {setIsAuthenticated, setUserData} = useContext(AuthContext);
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+  const [toastData, setToastData] = useState({});
 
   const onSubmit = async (data) => {
-
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/service-provider/login-sp`,
@@ -30,10 +32,17 @@ const SpLogin = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        setIsAuthenticated(true); // Update the auth state
+        setIsAuthenticated(true);
+        setUserData(data.data.sp);
         navigate("/");
       } else {
-        console.error("Login failed");
+        const data = await response.json();
+        setToastData({
+          message: data.message,
+          duration: 3000,
+          type: "failure",
+        });
+        setShowToast(true);
       }
     } catch (error) {
       console.log("error occured while login", error);
@@ -114,6 +123,14 @@ const SpLogin = () => {
           </p>
         </form>
       </div>
+      {showToast && (
+        <Toast
+          message={toastData.message}
+          type={toastData.type}
+          duration={toastData.duration}
+          onclose={() => setShowToast(false)}
+        />
+      )}
     </div>
   );
 };

@@ -36,7 +36,7 @@ const AuthProvider = ({children}) => {
       }
     };
 
-    if (userData.length <= 0) {
+    if (userData && userData.length <= 0) {
       const token = Cookies.get("accessToken");
       if (!token) {
         setIsAuthenticated(false);
