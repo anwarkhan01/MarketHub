@@ -46,7 +46,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const user = await User.create({
         username: username.toLowerCase(),
         name,
-        profilePhoto: profilePhotoUplaodResponse.url || "",
+        profilePhoto: profilePhotoUplaodResponse?.url || "",
         email,
         password,
         location: location || " ",

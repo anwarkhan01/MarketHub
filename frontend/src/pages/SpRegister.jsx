@@ -6,6 +6,7 @@ import {useContext} from "react";
 import {AuthContext} from "../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import Toast from "../components/Toast.jsx";
 
 const SpRegister = () => {
   const [location, setLocation] = useState({});
@@ -13,6 +14,8 @@ const SpRegister = () => {
   const [readableAddress, setReadableAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const {setIsAuthenticated, setUserData} = useContext(AuthContext);
+  const [showToast, setShowToast] = useState(false);
+  const [toastData, setToastData] = useState({});
   const navigate = useNavigate();
 
   const mapElement = useRef(null);
@@ -26,7 +29,7 @@ const SpRegister = () => {
 
   const handleClickOutside = (event) => {
     if (mapElement.current && !mapElement.current.contains(event.target)) {
-      setShowMap(false); // Hide overlay if click is outside
+      setShowMap(false);
     }
   };
 
@@ -37,7 +40,6 @@ const SpRegister = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // Cleanup the event listener on unmount
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showMap]);
 
@@ -68,11 +70,16 @@ const SpRegister = () => {
         setUserData(res.data.sp);
         setIsAuthenticated(true); // Update the auth state
         navigate("/");
+      } else {
+        let data = await response.json();
+        console.log(data.message);
+        setToastData({
+          message: data.message,
+          duration: 3000,
+          type: "failure",
+        });
+        setShowToast(true);
       }
-      // else {
-      //   console.error("Login failed");
-      //   navigate("/auth");
-      // }
     } catch (error) {
       console.log("errorr", error);
     }
@@ -418,6 +425,14 @@ const SpRegister = () => {
             readableAddress={readableAddress}
           />
         </div>
+      )}
+      {showToast && (
+        <Toast
+          message={toastData.message}
+          duration={toastData.duration}
+          type={toastData.type}
+          onclose={() => setShowToast(false)}
+        />
       )}
     </div>
   );
