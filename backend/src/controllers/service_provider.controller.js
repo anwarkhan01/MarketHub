@@ -4,8 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
-
-
+import { loadProfessions } from "../utils/professionCache.js";
 
 const generateAccessAndRefereshTokens = async (userId) => {
     try {
@@ -73,6 +72,9 @@ const registerServiceProvider = asyncHandler(async (req, res) => {
     const createdSP = await serviceProvider.findById(sp._id).select(
         "-password"
     )
+    if (createdSP) {
+        loadProfessions()
+    }
     console.log(createdSP)
     if (!createdSP) {
         throw new ApiError(500, "Something went wrong while registering the user")

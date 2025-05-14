@@ -1,7 +1,9 @@
 
 import { connectDB } from "./db/dbConnection.js"
 import { app } from "./app.js"
+import { loadProfessions } from "./utils/professionCache.js"
 
+loadProfessions()
 
 connectDB()
     .then(() => {
