@@ -128,7 +128,7 @@ const Home = () => {
     navigate("/sp-detailed-profile", {state: {searchedSP}});
   };
   return (
-    <div className="container mx-auto px-4 py-8 bg-[#02010A] min-h-screen w-full">
+    <div className="container mx-auto px-4 py-8 dark:bg-[#02010A] bg-gray-200 min-h-screen w-full">
       {/* Search Section */}
       <div className="mb-8">
         <form

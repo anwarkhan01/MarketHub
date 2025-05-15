@@ -122,9 +122,9 @@ const SpRegister = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#02010A] ">
-      <div className="w-full max-w-5xl p-8 bg-[#04052E] rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-white text-center mb-6">
+    <div className="min-h-screen  flex items-center justify-center dark:bg-[#02010A] bg-gray-200 ">
+      <div className="w-full max-w-5xl p-8 dark:bg-[#04052E] bg-white rounded-lg shadow-lg mt-20 mb-20">
+        <h1 className="text-3xl font-bold dark:text-white text-[#140152] text-center mb-6">
           Service Provider Registration
         </h1>
         <form
@@ -135,7 +135,7 @@ const SpRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="fullname"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Name <span className="text-orange-600">*</span>
             </label>
@@ -147,7 +147,7 @@ const SpRegister = () => {
                 required: {value: true, message: "name is required"},
               })}
               placeholder="Enter your full name"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.name && (
               <span className="text-red-700">{errors.name.message}</span>
@@ -158,7 +158,7 @@ const SpRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="username"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Username <span className="text-orange-600">*</span>
             </label>
@@ -170,7 +170,7 @@ const SpRegister = () => {
                 required: {value: true, message: "username is required"},
               })}
               placeholder="Enter your username"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.username && (
               <span className="text-red-700">{errors.username.message}</span>
@@ -181,7 +181,7 @@ const SpRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Email
             </label>
@@ -191,7 +191,7 @@ const SpRegister = () => {
               name="email"
               {...register("email")}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.email && (
               <span className="text-red-700">{errors.email.message}</span>
@@ -202,7 +202,7 @@ const SpRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Password <span className="text-orange-600">*</span>
             </label>
@@ -216,7 +216,7 @@ const SpRegister = () => {
                 maxLength: {value: 10, message: "Max length is 10"},
               })}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.password && (
               <span className="text-red-700">{errors.password.message}</span>
@@ -227,7 +227,7 @@ const SpRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Location <span className="text-orange-600">*</span>
             </label>
@@ -240,7 +240,7 @@ const SpRegister = () => {
                 required: {value: true, message: "locaton is required"},
               })}
               placeholder="Select your location"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
               style={{caretColor: "transparent"}}
             />
             {errors.location && (
@@ -251,7 +251,7 @@ const SpRegister = () => {
                 type="button"
                 name="location"
                 onClick={getCurrentLocation}
-                className="bg-[#22007C] text-white px-4 py-2 rounded-lg shadow-md"
+                className="bg-[#22007C] hover:bg-[#140152] text-white px-4 py-2 rounded-lg shadow-md cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -265,7 +265,7 @@ const SpRegister = () => {
                 type="button"
                 name="location"
                 onClick={() => setShowMap(true)}
-                className="bg-[#04052E] text-white px-4 py-2 rounded-lg shadow-md"
+                className="dark:bg-[#04052E] dark:text-gray-200 border dark:border-gray-400 border-[#140152] bg-white text-[#140152] px-4 py-2 rounded-lg cursor-pointer"
               >
                 Select on Map
               </button>
@@ -276,7 +276,7 @@ const SpRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="profession"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Profession <span className="text-orange-600">*</span>
             </label>
@@ -288,7 +288,7 @@ const SpRegister = () => {
                 required: {value: true, message: "profession is required"},
               })}
               placeholder="Enter your profession"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.profession && (
               <span className="text-red-700">{errors.profession.message}</span>
@@ -299,7 +299,7 @@ const SpRegister = () => {
           <div className="col-span-2">
             <label
               htmlFor="about"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               About
             </label>
@@ -317,7 +317,7 @@ const SpRegister = () => {
               )}
               placeholder="write about you and your profession"
               rows="3"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.about && (
               <span className="text-red-700">{errors.about.message}</span>
@@ -328,7 +328,7 @@ const SpRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="phoneNumber"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Phone Number <span className="text-orange-600">*</span>
             </label>
@@ -342,7 +342,7 @@ const SpRegister = () => {
                 maxLength: {value: 10, message: "maximum length is 10"},
               })}
               placeholder="Enter your phone number"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.phoneNumber && (
               <span className="text-red-700">{errors.phoneNumber.message}</span>
@@ -353,7 +353,7 @@ const SpRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="profilePhoto"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Profile Photo
             </label>
@@ -362,7 +362,7 @@ const SpRegister = () => {
               id="profilePhoto"
               name="profilePhoto"
               {...register("profilePhoto")}
-              className="w-full px-4 py-2 bg-[#140152] text-gray-300 rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
               accept="image/*"
             />
           </div>
@@ -371,7 +371,7 @@ const SpRegister = () => {
           {/* <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="workImages"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Work Images
             </label>
@@ -380,7 +380,7 @@ const SpRegister = () => {
               id="workImages"
               name="workImages"
               {...register("workImages")}
-              className="w-full px-4 py-2 bg-[#140152] text-gray-300 rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 bg-[#140152] dark:text-gray-300 text-[#140152] rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
               accept="image/*"
               multiple
             />
@@ -390,7 +390,7 @@ const SpRegister = () => {
           <div className="col-span-2">
             <label
               htmlFor="experience"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Experience
             </label>
@@ -400,7 +400,7 @@ const SpRegister = () => {
               {...register("experience")}
               placeholder="Describe your work experience"
               rows="3"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
               // required
             />
           </div>

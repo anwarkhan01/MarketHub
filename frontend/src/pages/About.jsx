@@ -2,11 +2,13 @@ import React from "react";
 
 const About = () => {
   return (
-    <div className="bg-[#02010A] text-white">
+    <div className="dark:bg-[#02010A] bg-gray-200 text-white">
       <div className="container mx-auto px-6 py-16">
         {/* Title Section */}
         <div className="text-center mb-16">
-          <p className="text-lg text-gray-400">Get to Know Us Better</p>
+          <p className="text-lg dark:text-gray-400 text-gray-700">
+            Get to Know Us Better
+          </p>
           <h2 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#22007C] to-[#140152]">
             Who We Are
           </h2>
@@ -72,7 +74,7 @@ const About = () => {
         </div>
 
         {/* Long Paragraph Section */}
-        <div className="mt-16 max-w-4xl mx-auto text-gray-400 space-y-6">
+        <div className="mt-16 max-w-4xl mx-auto dark:text-gray-400 text-gray-700 space-y-6">
           <p className="text-lg">
             We believe that access to skilled professionals should be seamless
             and transparent. MarketHub removes the traditional barriers and

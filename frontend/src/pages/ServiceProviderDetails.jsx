@@ -14,7 +14,7 @@ const ServiceProviderDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#02010A] text-white flex justify-center items-center p-6">
+    <div className="min-h-screen dark:bg-[#02010A] bg-gray-200 text-white flex justify-center items-center p-6">
       <div className="w-full max-w-4xl bg-[#04052E] p-6 rounded-lg shadow-lg">
         {/* Profile Section */}
         <div className="flex items-center gap-6">
@@ -24,10 +24,10 @@ const ServiceProviderDetails = () => {
             className="w-28 h-28 rounded-full border-4 border-[#22007C]"
           />
           <div>
-            <h2 className="text-2xl font-bold text-[#22007C]">
+            <h2 className="text-2xl font-bold text-[#2c1178]">
               {searchedSP.name || "Service Provider"}
             </h2>
-            <p className="text-sm text-gray-300">{searchedSP.profession}</p>
+            <p className="text-sm text-gray-300 ">{searchedSP.profession}</p>
           </div>
         </div>
 
@@ -52,12 +52,12 @@ const ServiceProviderDetails = () => {
 
         {/* Google Map */}
         <div className="mt-6">
-          <h3 className="text-lg font-semibold  text-[#22007C]">Location</h3>
+          <h3 className="text-lg font-semibold  text-white">Location </h3>
           <iframe
             title="Google Map Location"
             width="100%"
             height="250"
-            className="rounded-lg border-2 border-[#140152]"
+            className="rounded-lg "
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"

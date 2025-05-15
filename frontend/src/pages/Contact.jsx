@@ -2,10 +2,12 @@ import React from "react";
 
 const Contact = () => {
   return (
-    <div className="flex-grow bg-[#02010A] text-white">
+    <div className="flex-grow dark:bg-[#02010A] bg-gray-200 text-white">
       <div className="container mx-auto px-6 py-12">
         <div className="text-center mb-12">
-          <p className="text-gray-300 text-lg">We'd love to hear from you</p>
+          <p className="dark:text-gray-300 text-gray-700 text-lg">
+            We'd love to hear from you
+          </p>
           <h2 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#22007C] to-[#140152]">
             Let's Get In Touch
           </h2>

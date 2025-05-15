@@ -123,9 +123,9 @@ const UserRegister = () => {
     setShowMap(false);
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#02010A]">
-      <div className="w-full max-w-4xl p-8 bg-[#04052E] rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-white text-center mb-6">
+    <div className="min-h-screen flex items-center justify-center dark:bg-[#02010A] bg-gray-200">
+      <div className="w-full max-w-4xl p-8 dark:bg-[#04052E] bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold dark:text-white text-[#140152] text-center mb-6">
           User Registration
         </h1>
         <form
@@ -136,7 +136,7 @@ const UserRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Name
             </label>
@@ -148,7 +148,7 @@ const UserRegister = () => {
               {...register("name", {
                 minLength: {value: 3, message: "Min length is 3"},
               })}
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.name && (
               <span className="text-xs text-red-700">
@@ -161,7 +161,7 @@ const UserRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="username"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Username <span className="text-orange-600">*</span>
             </label>
@@ -175,7 +175,7 @@ const UserRegister = () => {
                 minLength: {value: 3, message: "Min length is 3"},
                 maxLength: {value: 12, message: "Max length is 12"},
               })}
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
               required
             />
             {errors.username && (
@@ -189,7 +189,7 @@ const UserRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Email
             </label>
@@ -199,7 +199,7 @@ const UserRegister = () => {
               name="email"
               {...register("email")}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
               required
             />
             {errors.email && (
@@ -213,7 +213,7 @@ const UserRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Password <span className="text-orange-600">*</span>
             </label>
@@ -227,7 +227,7 @@ const UserRegister = () => {
                 maxLength: {value: 10, message: "Max length is 10"},
               })}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.password && (
               <span className="text-xs text-red-700">
@@ -240,7 +240,7 @@ const UserRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="profilePhoto"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Profile Photo
             </label>
@@ -249,7 +249,7 @@ const UserRegister = () => {
               id="profilePhoto"
               name="profilePhoto"
               {...register("profilePhoto")}
-              className="w-full px-4 py-2 bg-[#140152] text-gray-300 rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
               accept="image/*"
             />
           </div>
@@ -258,7 +258,7 @@ const UserRegister = () => {
           <div className="col-span-2 md:col-span-1">
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Location
             </label>
@@ -269,7 +269,7 @@ const UserRegister = () => {
               value={readableAddress}
               {...register("location")}
               placeholder="Select your location"
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
               style={{caretColor: "transparent"}}
             />
             {errors.location && (
@@ -280,7 +280,7 @@ const UserRegister = () => {
                 type="button"
                 name="location"
                 onClick={getCurrentLocation}
-                className="bg-[#22007C] text-white px-4 py-2 rounded-lg shadow-md"
+                className="bg-[#22007C] hover:bg-[#140152] text-white px-4 py-2 rounded-lg shadow-md cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -294,7 +294,7 @@ const UserRegister = () => {
                 type="button"
                 name="location"
                 onClick={() => setShowMap(true)}
-                className="bg-[#04052E] text-white px-4 py-2 rounded-lg shadow-md"
+                className="dark:bg-[#04052E] dark:text-gray-200 border dark:border-gray-400 border-[#140152] bg-white text-[#140152] px-4 py-2 rounded-lg cursor-pointer"
               >
                 Select on Map
               </button>

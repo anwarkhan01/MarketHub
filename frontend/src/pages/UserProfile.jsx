@@ -26,7 +26,7 @@ const AccountDetails = () => {
   } = useForm();
   const handleClickOutside = (event) => {
     if (mapElement.current && !mapElement.current.contains(event.target)) {
-      setShowMap(false); // Hide overlay if click is outside
+      setShowMap(false);
     }
   };
 
@@ -51,9 +51,9 @@ const AccountDetails = () => {
         console.error(error);
       },
       {
-        enableHighAccuracy: true, // Requests GPS accuracy
-        timeout: 10000, // Wait 10 seconds before failing
-        maximumAge: 0, // Forces a fresh location fetch
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
       }
     );
   };
@@ -64,7 +64,6 @@ const AccountDetails = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // Cleanup the event listener on unmount
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showMap]);
 
@@ -172,7 +171,7 @@ const AccountDetails = () => {
   };
 
   return (
-    <div className="flex-grow  bg-[#02010A] flex justify-center items-center p-6">
+    <div className="flex-grow  dark:bg-[#02010A] bg-gray-200 flex justify-center items-center p-6">
       {userData && (
         <form
           onSubmit={handleSubmit(onSubmit)}

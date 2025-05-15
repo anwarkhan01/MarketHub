@@ -54,9 +54,9 @@ const UserLogin = () => {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#02010A]">
-      <div className="w-full max-w-md p-8 bg-[#04052E] rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-white text-center mb-6">
+    <div className="min-h-screen flex items-center justify-center dark:bg-[#02010A] bg-gray-200">
+      <div className="w-full max-w-md p-8 dark:bg-[#04052E] bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold dark:text-white text-[#140152] text-center mb-6">
           User Login
         </h1>
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -64,7 +64,7 @@ const UserLogin = () => {
           <div>
             <label
               htmlFor="username"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Username
             </label>
@@ -76,7 +76,7 @@ const UserLogin = () => {
               {...register("username", {
                 required: {value: true, message: "username is required"},
               })}
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 rounded-lg shadow-sm border  focus:ring-[#22007C]"
             />
             {errors.username && (
               <span className="text-xs text-red-700">
@@ -89,7 +89,7 @@ const UserLogin = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-300 mb-2"
+              className="block text-sm font-medium dark:text-gray-300 text-[#140152] mb-2"
             >
               Password
             </label>
@@ -101,7 +101,7 @@ const UserLogin = () => {
               {...register("password", {
                 required: {value: true, message: "password is required"},
               })}
-              className="w-full px-4 py-2 bg-[#140152] text-white rounded-lg shadow-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#22007C]"
+              className="w-full px-4 py-2 dark:bg-[#140152] bg-white dark:text-white text-[#140152] rounded-lg shadow-sm border dark:border-gray-600 border-gray-400 focus:outline-none dark:focus:ring-2 focus:ring-1 focus:ring-[#22007C]"
             />
             {errors.password && (
               <span className="text-xs text-red-700">
@@ -121,7 +121,7 @@ const UserLogin = () => {
           </div>
 
           {/* Register Link */}
-          <p className="text-sm text-gray-300 text-center">
+          <p className="text-sm dark:text-gray-300 text-gray-700 text-center">
             Don’t have an account?{" "}
             <a
               href="user-register"
