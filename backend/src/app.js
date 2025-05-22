@@ -1,17 +1,17 @@
 import express from "express"
 import cors from "cors"
-import dotevn from "dotenv"
+import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import { ApiError } from "./utils/ApiError.js"
 import { verifyJWT } from "./middlewares/auth.middleware.js"
 import { verifyUser } from "./controllers/user.controller.js"
 import { verifySP } from "./controllers/service_provider.controller.js"
 
-dotevn.config({
+dotenv.config({
     path: "./.env"
 })
 
-dotevn.config({
+dotenv.config({
     path: "./.env.local", override: true
 })
 
