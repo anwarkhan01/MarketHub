@@ -4,20 +4,31 @@ import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "../context/AuthProvider.jsx";
 import Toast from "../components/Toast.jsx";
+import ProgressBar from "../components/ProgressBar.jsx";
 
 const SpLogin = () => {
+  const {setIsAuthenticated, setUserData} = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+  const [toastData, setToastData] = useState({});
+  const [showProgressBar, setShowProgressBar] = useState(false);
   const {
     register,
     handleSubmit,
     formState: {errors, isSubmitting},
   } = useForm();
 
-  const {setIsAuthenticated, setUserData} = useContext(AuthContext);
-  const navigate = useNavigate();
-  const [showToast, setShowToast] = useState(false);
-  const [toastData, setToastData] = useState({});
-
   const onSubmit = async (data) => {
+    setShowProgressBar(true);
+
+    const renderTimeOut = setTimeout(() => {
+      setToastData({
+        message: "Server is starting up, please wait a moment...",
+        type: "information",
+      });
+      setShowToast(true);
+    }, 3000);
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/service-provider/login-sp`,
@@ -30,12 +41,15 @@ const SpLogin = () => {
           body: JSON.stringify(data),
         }
       );
+      clearTimeout(renderTimeOut);
       if (response.ok) {
+        setShowProgressBar(false);
         const data = await response.json();
         setIsAuthenticated(true);
         setUserData(data.data.sp);
         navigate("/");
       } else {
+        setShowProgressBar(false);
         const data = await response.json();
         setToastData({
           message: data.message,
@@ -131,6 +145,7 @@ const SpLogin = () => {
           onclose={() => setShowToast(false)}
         />
       )}
+      {showProgressBar && <ProgressBar />}
     </div>
   );
 };

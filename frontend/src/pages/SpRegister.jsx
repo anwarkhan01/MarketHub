@@ -7,6 +7,7 @@ import {AuthContext} from "../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import Toast from "../components/Toast.jsx";
+import ProgressBar from "../components/ProgressBar.jsx";
 
 const SpRegister = () => {
   const [location, setLocation] = useState({});
@@ -16,6 +17,7 @@ const SpRegister = () => {
   const {setIsAuthenticated, setUserData} = useContext(AuthContext);
   const [showToast, setShowToast] = useState(false);
   const [toastData, setToastData] = useState({});
+  const [showProgressBar, setShowProgressBar] = useState(false);
   const navigate = useNavigate();
 
   const mapElement = useRef(null);
@@ -44,6 +46,15 @@ const SpRegister = () => {
   }, [showMap]);
 
   const onSubmit = async (data) => {
+    setShowProgressBar(true);
+    const renderTimeOut = setTimeout(() => {
+      setToastData({
+        message: "Server is starting up, please wait a moment...",
+        type: "information",
+      });
+      setShowToast(true);
+    }, 3000);
+
     try {
       data = {...data, location: JSON.stringify(location)};
       setIsAuthenticated(false);
@@ -65,14 +76,16 @@ const SpRegister = () => {
           body: formData,
         }
       );
+      clearTimeout(renderTimeOut);
       if (response.ok) {
+        setShowProgressBar(false);
         const res = await response.json();
         setUserData(res.data.sp);
         setIsAuthenticated(true); // Update the auth state
         navigate("/");
       } else {
+        setShowProgressBar(false);
         let data = await response.json();
-        console.log(data.message);
         setToastData({
           message: data.message,
           duration: 3000,
@@ -105,9 +118,9 @@ const SpRegister = () => {
         console.error(error);
       },
       {
-        enableHighAccuracy: true, // Requests GPS accuracy
-        timeout: 10000, // Wait 10 seconds before failing
-        maximumAge: 0, // Forces a fresh location fetch
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
       }
     );
   };
@@ -434,6 +447,7 @@ const SpRegister = () => {
           onclose={() => setShowToast(false)}
         />
       )}
+      {showProgressBar && <ProgressBar />}
     </div>
   );
 };

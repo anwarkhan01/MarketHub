@@ -7,6 +7,7 @@ import {useContext} from "react";
 import {AuthContext} from "../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import Toast from "../components/Toast.jsx";
+import ProgressBar from "../components/ProgressBar.jsx";
 const UserRegister = () => {
   const [location, setLocation] = useState({});
   const [showMap, setShowMap] = useState(false);
@@ -14,6 +15,7 @@ const UserRegister = () => {
   const [toastData, setToastData] = useState({});
   const [readableAddress, setReadableAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showProgressBar, setShowProgressBar] = useState(false);
   const {setIsAuthenticated, setUserData} = useContext(AuthContext);
   const navigate = useNavigate();
   const mapElement = useRef(null);
@@ -39,14 +41,22 @@ const UserRegister = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // Cleanup the event listener on unmount
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showMap]);
 
   const onSubmit = async (data) => {
+    setShowProgressBar(true);
+    const renderTimeOut = setTimeout(() => {
+      setToastData({
+        message: "Server is starting up, please wait a moment...",
+        type: "information",
+      });
+      setShowToast(true);
+    }, 3000);
+
     try {
-      data = {...data, location: JSON.stringify(location)};
       setIsAuthenticated(false);
+      data = {...data, location: JSON.stringify(location)};
       const formData = new FormData();
       for (const key in data) {
         if (key === "profilePhoto" && data[key][0]) {
@@ -62,13 +72,16 @@ const UserRegister = () => {
           body: formData,
         }
       );
+      clearTimeout(renderTimeOut);
       if (response.ok) {
+        setShowProgressBar(false);
         const res = await response.json();
         setIsAuthenticated(true);
         setUserData(res.data.user);
         console.log("res", res);
         navigate("/");
       } else {
+        setShowProgressBar(false);
         let data = await response.json();
         console.log(data.message);
         setToastData({
@@ -331,6 +344,7 @@ const UserRegister = () => {
           onclose={() => setShowToast(false)}
         />
       )}
+      {showProgressBar && <ProgressBar />}
     </div>
   );
 };

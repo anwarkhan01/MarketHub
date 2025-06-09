@@ -4,11 +4,13 @@ import {useContext, useState} from "react";
 import {AuthContext} from "../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
 import Toast from "../components/Toast.jsx";
+import ProgressBar from "../components/ProgressBar.jsx";
 const UserLogin = () => {
   const {setIsAuthenticated, setUserData} = useContext(AuthContext);
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState(false);
   const [toastData, setToastData] = useState({});
+  const [showProgressBar, setShowProgressBar] = useState(false);
   const {
     handleSubmit,
     register,
@@ -17,7 +19,15 @@ const UserLogin = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("login started");
+    setShowProgressBar(true);
+    const renderTimeOut = setTimeout(() => {
+      setToastData({
+        message: "Server is starting up, please wait a moment...",
+        type: "information",
+      });
+      setShowToast(true);
+    }, 3000);
+
     try {
       setIsAuthenticated(false);
       const response = await fetch(
@@ -31,17 +41,15 @@ const UserLogin = () => {
           credentials: "include",
         }
       );
+      clearTimeout(renderTimeOut);
       if (response.ok) {
+        setShowProgressBar(false);
         let data = await response.json();
         setIsAuthenticated(true);
-        if (data.data.user) {
-          setUserData(data.data.user);
-          navigate("/");
-        } else {
-          setUserData(data.data.sp);
-          navigate("/");
-        }
+        setUserData(data.data.user);
+        navigate("/");
       } else {
+        setShowProgressBar(false);
         setIsAuthenticated(false);
         let data = await response.json();
         setToastData({message: data.message, duration: 3000, type: "failure"});
@@ -140,6 +148,7 @@ const UserLogin = () => {
           onclose={() => setShowToast(false)}
         />
       )}
+      {showProgressBar && <ProgressBar />}
     </div>
   );
 };
