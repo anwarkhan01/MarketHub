@@ -22,7 +22,7 @@ const Toast = ({
   }, [duration, onclose]);
   return (
     <div
-      className={`fixed top-3 left-[50vw] translate-x-[-50%] bg-[#1a1a2e] rounded-[7px] border-b-3 ${borderColors[type]}`}
+      className={`fixed top-3 left-[50vw] translate-x-[-50%] bg-[#1a1a2e] rounded-[7px] border-b-3 z-20 ${borderColors[type]}`}
     >
       <div className="text-white pt-1 pr-3 pb-2 pl-3">
         <span className="text-sm bg-">{message}</span>

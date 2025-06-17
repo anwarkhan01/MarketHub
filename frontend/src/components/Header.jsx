@@ -33,7 +33,7 @@ const Header = () => {
   }, [menuOpen]);
 
   return (
-    <header className="dark:bg-[#140152] bg-gray-100 shadow-md px-4 md:px-6 py-4 sticky top-0 z-50">
+    <header className="dark:bg-[#140152] bg-gray-100 shadow-md px-4 md:px-6 py-4 sticky top-0 z-10">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
         {/* Logo */}
         <h2 className="text-xl md:text-2xl font-bold text-[#3c247c]">

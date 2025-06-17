@@ -110,6 +110,31 @@ const loginUser = asyncHandler(async (req, res) => {
         )
 })
 
+const updateUserData = asyncHandler(async (req, res) => {
+    const { username, ...updatedFields } = req.body
+
+    let profilePhotoPath;
+    let profilePhotoUplaodResponse;
+    if (req.files && Array.isArray(req.files.profilePhoto) && req.files.profilePhoto.length > 0) {
+        profilePhotoPath = req.files.profilePhoto[0]?.path;
+        profilePhotoUplaodResponse = await uploadOnCloudinary(profilePhotoPath)
+    }
+
+
+    const updatedUserData = await User.findOneAndUpdate(
+        { username: username.toLowerCase() },
+        {
+            $set: {
+                ...updatedFields,
+                profilePhoto: profilePhotoUplaodResponse?.url,
+            },
+        },
+        { new: true }
+    );
+
+
+    res.status(200).json(new ApiResponse(200, { user: updatedUserData }, "Data Updated Successfully"));
+})
 const verifyUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
@@ -121,4 +146,4 @@ const verifyUser = asyncHandler(async (req, res) => {
         )
 })
 
-export { registerUser, loginUser, verifyUser }
+export { registerUser, loginUser, verifyUser, updateUserData }

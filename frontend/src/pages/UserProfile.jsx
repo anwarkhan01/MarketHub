@@ -4,17 +4,19 @@ import getReadableAddress from "../utils/getReadableAddress";
 import MapComponent from "../components/MapComponent.jsx";
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
+import Toast from "../components/Toast.jsx";
+import ProgressBar from "../components/ProgressBar.jsx";
 const AccountDetails = () => {
-  const {userData, setIsAuthenticated} = useContext(AuthContext);
+  const {userData, setUserData, setIsAuthenticated} = useContext(AuthContext);
   const navigate = useNavigate();
-  const [preview, setPreview] = useState(
-    userData.profilePhoto || "/default-avatar.png"
-  );
+  const [preview, setPreview] = useState(userData.profilePhoto || "users.png");
   const [isEditing, setIsEditing] = useState(false);
-  // const [message, setMessage] = useState("");
   const [location, setLocation] = useState(userData.location);
   const [showMap, setShowMap] = useState(false);
   const [readableAddress, setReadableAddress] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [toastData, setToastData] = useState({});
+  const [showProgressBar, setShowProgressBar] = useState(false);
   const mapElement = useRef();
 
   const {
@@ -22,8 +24,9 @@ const AccountDetails = () => {
     handleSubmit,
     setValue,
     setError,
-    formState: {errors, isSubmitting},
+    formState: {dirtyFields, errors, isSubmitting},
   } = useForm();
+
   const handleClickOutside = (event) => {
     if (mapElement.current && !mapElement.current.contains(event.target)) {
       setShowMap(false);
@@ -31,7 +34,6 @@ const AccountDetails = () => {
   };
 
   const getCurrentLocation = () => {
-    // setIsLoading(true);
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser.");
       return;
@@ -42,11 +44,13 @@ const AccountDetails = () => {
         const {latitude, longitude} = position.coords;
         const address = await getReadableAddress(latitude, longitude);
         setReadableAddress(address);
-        // setValue("location", {lat: latitude, lng: longitude});
-        // setIsLoading(false);
+        setValue(
+          "location",
+          {lat: latitude, lng: longitude},
+          {shouldDirty: true}
+        );
       },
       (error) => {
-        // setIsLoading(false);
         alert("Unable to retrieve your location.");
         console.error(error);
       },
@@ -57,6 +61,7 @@ const AccountDetails = () => {
       }
     );
   };
+
   useEffect(() => {
     if (showMap) {
       document.addEventListener("mousedown", handleClickOutside);
@@ -68,7 +73,7 @@ const AccountDetails = () => {
   }, [showMap]);
 
   useEffect(() => {
-    const updateData = async () => {
+    const updatedData = async () => {
       // editedData.location = "";
       for (const key in userData) {
         if (key === "location") {
@@ -82,79 +87,77 @@ const AccountDetails = () => {
         }
       }
     };
-    updateData();
+    updatedData();
   }, [userData]);
 
   const handleLocationSelect = async (selectedLocation) => {
     const {lat, lng} = selectedLocation;
     const address = await getReadableAddress(lat, lng);
     setReadableAddress(address);
-    // setValue("location", {lat, lng});
+    setValue("location", {lat, lng}, {shouldDirty: true});
     setLocation({lat, lng});
     setShowMap(false);
   };
 
-  // const handleSave = () => {
-  //   setMessage("Changes saved successfully!");
-  //   setIsEditing(false);
-  // };
-
-  // const handleProfilePhotoChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setEditedData({...editedData, profilePhoto: reader.result});
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-
-  const handleFileChange = (event) => {
+  const handleProfilePhotoChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
       setPreview(imageURL);
-      setValue("profilePhoto", file);
+      setValue("profilePhoto", file, {shouldDirty: true});
     }
   };
 
   const onSubmit = async (data) => {
+    if (Object.keys(dirtyFields).length <= 0) {
+      setIsEditing(false);
+      return;
+    }
+    setShowProgressBar(true);
     data = {...data, location: JSON.stringify(location)};
-    // try {
-    //   data = {...data, location: JSON.stringify(location)};
-    //   setIsAuthenticated(false);
-    //   const formData = new FormData();
-    //   for (const key in data) {
-    //     if (key === "profilePhoto" && data[key][0]) {
-    //       formData.append("profilePhoto", data[key][0]);
-    //     } else {
-    //       formData.append(key, data[key]);
-    //     }
-    //   }
+    console.log("dirtyFields", dirtyFields);
+    let updatedData = {};
+    Object.keys(dirtyFields).forEach((key) => {
+      updatedData[key] = data[key];
+    });
+    updatedData["username"] = userData.username;
+    console.log("updatedData", updatedData);
 
-    //   const response = await fetch(
-    //     "http://localhost:8000/api/v1/service-provider/register-sevice-provider",
-    //     {
-    //       method: "POST",
-    //       // headers: {
-    //       //   "content-type": "application/json",
-    //       // },
-    //       body: formData,
-    //     }
-    //   );
-    //   if (response.ok) {
-    //     const res = await response.json();
-    //     setIsAuthenticated(true); // Update the auth state
-    //     navigate("/");
-    //   }
-    //   //  else {
-    //   //   console.error("Login failed");
-    //   // }
+    const formData = new FormData();
+    for (const key in updatedData) {
+      if (key === "profilePhoto" && updatedData[key][0]) {
+        formData.append("profilePhoto", updatedData[key][0]);
+      } else {
+        formData.append(key, updatedData[key]);
+      }
+    }
 
-    // } catch (error) {
-    //   console.log("errooorr", error);
-    // }
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/update-user-data`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setUserData(data.data.user);
+        setToastData({
+          message: "Data Updated Successfully",
+          type: "success",
+        });
+        setShowToast(true);
+        console.log("updated data", data);
+      } else {
+        console.error("Some Error Occured");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+    setShowProgressBar(false);
+    setIsEditing(false);
+    return true;
   };
   const updateDatatoForm = () => {
     for (const key in userData) {
@@ -171,12 +174,9 @@ const AccountDetails = () => {
   };
 
   return (
-    <div className="flex-grow  dark:bg-[#02010A] bg-gray-200 flex justify-center items-center p-6">
+    <div className="flex justify-center flex-grow dark:bg-[#02010A] bg-gray-200 j items-center p-6">
       {userData && (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full max-w-2xl bg-[#140152] rounded-2xl shadow-lg p-8 text-white relative"
-        >
+        <form className="w-full max-w-2xl bg-[#140152] rounded-2xl shadow-lg p-8 text-white relative">
           {/* profilePhoto  */}
           <div className="flex flex-col items-center">
             <div className="relative w-32 h-32">
@@ -198,17 +198,23 @@ const AccountDetails = () => {
                   accept="image/*"
                   {...register("profilePhoto")}
                   className="hidden"
-                  onChange={handleFileChange}
+                  onChange={handleProfilePhotoChange}
                 />
               )}
             </div>
           </div>
 
-          {/* Other fields  */}
+          {/* username  */}
+          <div className="flex border-b border-[#22007C] pb-2 items-center">
+            <span className="text-[#AAB3CF] min-w-[25%]">Username:</span>
+            <span className="min-w-[75%]">{userData.username}</span>
+          </div>
+
+          {/* editable fields */}
           <div className="mt-6 space-y-4">
             {/* name  */}
-            <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
-              <span className="text-[#AAB3CF]">Name:</span>
+            <div className="flex border-b border-[#22007C] pb-2 items-center">
+              <span className="text-[#AAB3CF] min-w-[25%]">Name:</span>
               {isEditing ? (
                 <input
                   type="text"
@@ -218,49 +224,37 @@ const AccountDetails = () => {
                   className="bg-transparent border-b border-white focus:outline-none text-white w-2/3 p-2 text-lg"
                 />
               ) : (
-                <span>{userData.name || "User Name"}</span>
+                <span className="min-w-[75%]">
+                  {userData.name || "User Name"}
+                </span>
               )}
             </div>
 
             {/* email */}
-            <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
-              <span className="text-[#AAB3CF]">Email:</span>
+            <div className="flex border-b border-[#22007C] pb-2 items-center">
+              <span className="text-[#AAB3CF] min-w-[25%]">Email:</span>
               {isEditing ? (
                 <input
                   type="email"
-                  // value={userData.email}
-                  // onChange={(e) => handleChange(e, "email")}
+                  name="email"
                   {...register("email")}
                   className="bg-transparent border-b border-white focus:outline-none text-white w-2/3 p-2 text-lg"
-                  // required
                 />
               ) : (
-                <span>{userData.email}</span>
+                <span className="min-w-[75%]">{userData.email}</span>
               )}
             </div>
-            {/* username  */}
-            <div className="flex justify-between border-b border-[#22007C] pb-2 items-center">
-              <span className="text-[#AAB3CF]">Username:</span>
-              {isEditing ? (
-                <input
-                  type="text"
-                  {...register("username")}
-                  className="bg-transparent border-b border-white focus:outline-none text-white w-2/3 p-2 text-lg"
-                  required
-                />
-              ) : (
-                <span>{userData.username}</span>
-              )}
-            </div>
+
             {/* location  */}
-            <div className="flex justify-between border-b border-[#22007C] pb-2 items-center relative">
-              <span className="text-[#AAB3CF]">Location:</span>
+            <div className="flex border-b border-[#22007C] pb-2 items-center relative">
+              <span className="text-[#AAB3CF] min-w-[25%]">Location:</span>
               {isEditing ? (
                 <div className="flex w-2/3 items-center space-x-2">
                   <input
                     type="text"
                     value={readableAddress}
                     className="bg-transparent border-b border-white focus:outline-none text-white w-full p-2 text-lg"
+                    readOnly
                   />
                   <button
                     className="text-[#FFD700] text-xl hover:text-white transition"
@@ -269,7 +263,6 @@ const AccountDetails = () => {
                   >
                     📍
                   </button>
-                  {/* Button to open map modal */}
                   <button
                     className="text-[#FFD700] text-lg px-2 hover:text-white transition"
                     title="Select location on map"
@@ -279,28 +272,47 @@ const AccountDetails = () => {
                   </button>
                 </div>
               ) : (
-                <span className="w-2/3 break-words">{readableAddress}</span>
+                <span className="w-2/3 break-words min-w-[75%]">
+                  {readableAddress}
+                </span>
               )}
             </div>
           </div>
 
           {/* buttons */}
           <div className="mt-6 flex justify-between items-center">
-            <button
-              className="bg-[#22007C] text-white px-6 py-2 rounded-lg hover:bg-[#04052E] transition"
-              type={isEditing ? "button" : "submit"}
-              onClick={
-                isEditing
-                  ? () => setIsEditing(false)
-                  : () => {
-                      setIsEditing(true);
-                      updateDatatoForm();
-                    }
-              }
-            >
-              {isEditing ? "Save Changes" : "Edit Profile"}
-            </button>
+            <div className="buttons">
+              <button
+                className={`${
+                  Object.keys(dirtyFields).length <= 0 && isEditing
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer"
+                } bg-[#22007C] text-white px-6 py-2 rounded-lg hover:bg-[#04052E] transition`}
+                type={isEditing ? "submit" : "button"}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (isEditing) {
+                    const success = await handleSubmit(onSubmit)();
+                    if (success) setIsEditing(false);
+                  } else {
+                    setIsEditing(true);
+                    updateDatatoForm();
+                  }
+                }}
+              >
+                {isEditing ? "Save Changes" : "Edit Profile"}
+              </button>
 
+              <button
+                className={`${
+                  !isEditing ? "hidden" : ""
+                } bg-[#22007C] text-white px-6 py-2 ml-2 rounded-lg hover:bg-[#04052E] transition`}
+                type="button"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancel
+              </button>
+            </div>
             {/* logout */}
             <button
               className="text-red-600 text-sm hover:underline transition"
@@ -310,10 +322,6 @@ const AccountDetails = () => {
               Logout
             </button>
           </div>
-
-          {/* {message && (
-            <div className="mt-4 text-green-500 text-center">{message}</div>
-          )} */}
         </form>
       )}
       {showMap && (
@@ -326,6 +334,14 @@ const AccountDetails = () => {
           />
         </div>
       )}
+      {showToast && (
+        <Toast
+          message={toastData.message}
+          type={toastData.type}
+          onclose={() => setShowToast(false)}
+        />
+      )}
+      {showProgressBar && <ProgressBar />}
     </div>
   );
 };
