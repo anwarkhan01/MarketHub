@@ -140,4 +140,28 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
 
 })
 
-export { registerServiceProvider, loginServiceProvider, verifySP }
+const updateSPData = asyncHandler(async (req, res) => {
+    const { username, ...updatedFields } = req.body
+    console.log("sp", username, updatedFields)
+    let profilePhotoPath;
+    let profilePhotoUplaodResponse;
+    if (req.files && Array.isArray(req.files.profilePhoto) && req.files.profilePhoto.length > 0) {
+        profilePhotoPath = req.files.profilePhoto[0]?.path;
+        profilePhotoUplaodResponse = await uploadOnCloudinary(profilePhotoPath)
+    }
+
+    const updatedSPData = await serviceProvider.findOneAndUpdate(
+        { username: username.toLowerCase() },
+        {
+            $set: {
+                ...updatedFields,
+                profilePhoto: profilePhotoUplaodResponse?.url,
+            },
+        },
+        { new: true }
+    );
+
+    res.status(200).json(new ApiResponse(200, { sp: updatedSPData }, "Data Updated Successfully"));
+})
+
+export { registerServiceProvider, loginServiceProvider, verifySP, updateSPData }
