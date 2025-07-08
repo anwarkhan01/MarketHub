@@ -37,7 +37,6 @@ const SpLogin = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include",
           body: JSON.stringify(data),
         }
       );
@@ -45,6 +44,8 @@ const SpLogin = () => {
       if (response.ok) {
         setShowProgressBar(false);
         const data = await response.json();
+        localStorage.setItem("accessToken", data.data.accessToken);
+        localStorage.setItem("refreshToken", data.data.refreshToken);
         setIsAuthenticated(true);
         setUserData(data.data.sp);
         navigate("/");

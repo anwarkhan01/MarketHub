@@ -129,12 +129,16 @@ const SpProfile = () => {
     }
 
     try {
+      const token = localStorage.getItem("accessToken");
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
         }/api/v1/service-provider/update-sp-data`,
         {
           method: "PUT",
+          headers: {
+            Authrization: `Bearer ${token}`,
+          },
           body: formData,
         }
       );

@@ -38,13 +38,14 @@ const UserLogin = () => {
             "content-type": "application/json",
           },
           body: JSON.stringify(data),
-          credentials: "include",
         }
       );
       clearTimeout(renderTimeOut);
       if (response.ok) {
         setShowProgressBar(false);
         let data = await response.json();
+        localStorage.setItem("accessToken", data.data.accessToken);
+        localStorage.setItem("refreshToken", data.data.refreshToken);
         setIsAuthenticated(true);
         setUserData(data.data.user);
         navigate("/");

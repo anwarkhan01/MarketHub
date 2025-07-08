@@ -120,20 +120,11 @@ const loginServiceProvider = asyncHandler(async (req, res) => {
 
     const loggedInUser = await serviceProvider.findById(sp._id).select("-password -refreshToken")
 
-    const options = {
-        httpOnly: false,
-        secure: true,
-        sameSite: "None"
-    }
-
     return res
         .status(200)
-        .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, options)
-        .cookie("isLoggedIn", true)
         .json(
             new ApiResponse(
-                200, { sp: loggedInUser },
+                200, { sp: loggedInUser, accessToken, refreshToken },
                 "Service Provider logged In Successfully"
             )
         )

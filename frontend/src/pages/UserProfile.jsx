@@ -74,7 +74,6 @@ const AccountDetails = () => {
 
   useEffect(() => {
     const updatedData = async () => {
-      // editedData.location = "";
       for (const key in userData) {
         if (key === "location") {
           if (userData[key] === "") {
@@ -83,7 +82,6 @@ const AccountDetails = () => {
           const {lat, lng} = JSON.parse(userData[key]);
           const humanReadableAddress = await getReadableAddress(lat, lng);
           setReadableAddress(humanReadableAddress);
-          // setCurrenUserData((p) => ({...p, location: readableAddress}));
         }
       }
     };
@@ -133,10 +131,14 @@ const AccountDetails = () => {
     }
 
     try {
+      const token = localStorage.getItem("accessToken");
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/update-user-data`,
         {
           method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           body: formData,
         }
       );

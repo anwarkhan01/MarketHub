@@ -10,11 +10,14 @@ const AuthProvider = ({children}) => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
         const response = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/api/v1/verify`,
           {
             method: "GET",
-            credentials: "include", // Include cookies
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         const data = await response.json();
@@ -32,12 +35,12 @@ const AuthProvider = ({children}) => {
         console.error("Error verifying user:", error);
         setIsAuthenticated(false);
       } finally {
-        setLoading(false); // Mark loading as complete
+        setLoading(false);
       }
     };
 
     if (userData && userData.length <= 0) {
-      const token = Cookies.get("accessToken");
+      const token = localStorage.getItem("accessToken");
       if (!token) {
         setIsAuthenticated(false);
         setLoading(false);

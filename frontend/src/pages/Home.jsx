@@ -72,12 +72,16 @@ const Home = () => {
     setLoading(true);
     setSearchResults([]);
     try {
+      const token = localStorage.getItem("accessToken");
       const response = await fetch(
         `${
           import.meta.env.VITE_BACKEND_URL
         }/api/v1/user/search/service-provider?profession=${query.query}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       const data = await response.json();
@@ -91,11 +95,10 @@ const Home = () => {
             let pointA;
             let pointB;
             if (sp.location) {
-              const {lat, lng} = JSON.parse(sp.location); // Parse the location string
+              const {lat, lng} = JSON.parse(sp.location);
               pointA = {lat, lng};
-              // Add both the readable address and the lat/lng
               sp.humanReadableAddress = await getReadableAddress(lat, lng);
-              sp.coordinates = {lat, lng}; // Preserve the lat/lng for map display
+              sp.coordinates = {lat, lng};
             }
             if (userData.location) {
               const {lat, lng} = JSON.parse(userData.location);
@@ -107,7 +110,7 @@ const Home = () => {
           })
         );
 
-        setSearchResults(updatedServiceProviders); // Update the search results
+        setSearchResults(updatedServiceProviders);
       }
     } catch (error) {
       console.log(error);
