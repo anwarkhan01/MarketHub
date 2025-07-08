@@ -23,6 +23,11 @@ const Home = () => {
 
   const defaultData = async () => {
     setSearchResults([]);
+    const cachedData = sessionStorage.getItem("spResults");
+    if (cachedData) {
+      setSearchResults(JSON.parse(cachedData));
+      return;
+    }
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/user/general-sp-data`,
@@ -42,7 +47,7 @@ const Home = () => {
             let pointA;
             let pointB;
             if (sp.location) {
-              const {lat, lng} = JSON.parse(sp.location); // Parse the location string
+              const {lat, lng} = JSON.parse(sp.location);
               pointA = {lat, lng};
               sp.humanReadableAddress = await getReadableAddress(lat, lng);
               sp.coordinates = {lat, lng};
@@ -56,8 +61,11 @@ const Home = () => {
             return sp;
           })
         );
-
-        setSearchResults(updatedServiceProviders); // Update the search results
+        sessionStorage.setItem(
+          "spResults",
+          JSON.stringify(updatedServiceProviders)
+        );
+        setSearchResults(updatedServiceProviders);
       }
     } catch (error) {}
   };
